@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { resolve, extname } from 'node:path';
 import { spawn } from 'node:child_process';
+import { stripVTControlCharacters } from 'node:util';
 import { chromium, expect, type Locator } from '@playwright/test';
 
 const consumerIndex = process.argv.indexOf('--consumer');
@@ -21,7 +22,7 @@ async function dev(base: string): Promise<{ url: URL; stop: (_close?: boolean) =
       const timer = setTimeout(() => reject(new Error(`Fixture dev timeout: ${output}`)), 60_000);
       const read = (chunk: Buffer) => {
         output += chunk.toString();
-        const address = /http:\/\/127\.0\.0\.1:\d+/.exec(output);
+        const address = /http:\/\/127\.0\.0\.1:\d+/.exec(stripVTControlCharacters(output));
         if (address) { clearTimeout(timer); accept(new URL(address[0])); }
       };
       child.stdout.on('data', read); child.stderr.on('data', read);

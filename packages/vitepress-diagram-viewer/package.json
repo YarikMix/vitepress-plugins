@@ -1,6 +1,6 @@
 {
   "name": "@wely6743/vitepress-diagram-viewer",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Shared VitePress diagram viewer for Mermaid and Eraser",
   "type": "module",
   "license": "UNLICENSED",

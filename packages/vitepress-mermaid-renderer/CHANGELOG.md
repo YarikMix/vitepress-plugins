@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0 (2026-11-04)
+
+
+### Features
+
+* **mermaid:** перенести renderer с исправлениями форка ([c28ad8e](https://github.com/YarikMix/vitepress-plugins/commit/c28ad8e2d57e1c28bab36de7853a7eb72df8fe2b))
+* собрать VitePress-плагины в личном монорепозитории ([399ae47](https://github.com/YarikMix/vitepress-plugins/commit/399ae474c43a10a671184fd89d37acc069d306bb))
+* собрать личные VitePress-плагины и настроить выпуск ([399ae47](https://github.com/YarikMix/vitepress-plugins/commit/399ae474c43a10a671184fd89d37acc069d306bb))
+
 ## 1.2.2
 
 ### Changed in 1.2.2

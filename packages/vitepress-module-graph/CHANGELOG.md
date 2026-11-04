@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.0 (2026-11-04)
+
+
+### Features
+
+* **module-graph:** перенести пакет в личный scope ([ddb6d5c](https://github.com/YarikMix/vitepress-plugins/commit/ddb6d5c8b7108bf12d53bab73f6155d9c94d2c54))
+* собрать VitePress-плагины в личном монорепозитории ([399ae47](https://github.com/YarikMix/vitepress-plugins/commit/399ae474c43a10a671184fd89d37acc069d306bb))
+* собрать личные VitePress-плагины и настроить выпуск ([399ae47](https://github.com/YarikMix/vitepress-plugins/commit/399ae474c43a10a671184fd89d37acc069d306bb))
+
 ## [1.0.0](https://github.com/TP-Prepare/frontend-packages/compare/vitepress-module-graph-v0.3.0...vitepress-module-graph-v1.0.0) (2026-10-31)
 
 

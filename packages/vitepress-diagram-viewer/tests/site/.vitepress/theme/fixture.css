@@ -1,0 +1,3 @@
+/* The fixture supplies a wide article so DiagramSection can exercise both layouts. */
+.VPDoc .content, .VPDoc .content-container { max-width: 1800px !important; }
+.VPDoc .container { max-width: 2000px !important; }

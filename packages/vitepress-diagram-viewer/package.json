@@ -1,0 +1,60 @@
+{
+  "name": "@wely6743/vitepress-diagram-viewer",
+  "version": "0.0.0",
+  "description": "Shared VitePress diagram viewer for Mermaid and Eraser",
+  "type": "module",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YarikMix/vitepress-plugins.git",
+    "directory": "packages/vitepress-diagram-viewer"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./node": {
+      "types": "./dist/node/index.d.mts",
+      "import": "./dist/node/index.mjs"
+    },
+    "./style.css": "./dist/style.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "*.css",
+    "*.vue"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "peerDependencies": {
+    "vitepress": "2.0.0-alpha.21",
+    "vue": "^3.5"
+  },
+  "dependencies": {
+    "@panzoom/panzoom": "4.6.2"
+  },
+  "devDependencies": {
+    "vitepress": "2.0.0-alpha.21",
+    "vue": "3.5.43",
+    "vue-tsc": "3.3.11",
+    "@typescript/typescript6": "6.0.2",
+    "@playwright/test": "^1.63.0",
+    "@vue/compiler-sfc": "3.5.43",
+    "mermaid": "^11",
+    "@wely6743/vitepress-mermaid-renderer": "workspace:*"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit && node scripts/vue-tsc.cjs --noEmit",
+    "test": "bun test test",
+    "check:site": "bun scripts/check-site.ts"
+  }
+}

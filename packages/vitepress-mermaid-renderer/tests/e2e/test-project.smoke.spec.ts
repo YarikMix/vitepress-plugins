@@ -1,0 +1,32 @@
+import { expect, test } from '@playwright/test';
+
+test('renders Mermaid diagrams and toolbar controls in the VitePress smoke site', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await expect(
+    page.getByRole('heading', { name: 'VitePress Mermaid Renderer' }),
+  ).toBeVisible();
+
+  await page.getByRole('link', { name: 'View Examples' }).click();
+  await expect(page).toHaveURL(/\/examples\/basic$/);
+  await expect(
+    page.getByRole('heading', { name: 'Basic Examples' }),
+  ).toBeVisible();
+
+  const diagrams = page.locator('.mermaid-container');
+  await expect(diagrams.first()).toBeVisible();
+  await expect(diagrams.first().locator('.mermaid > svg')).toBeVisible();
+  await expect(
+    diagrams
+      .first()
+      .locator('.desktop-controls [data-mermaid-control="zoomIn"]'),
+  ).toBeVisible();
+
+  // Scroll the page to trigger IntersectionObserver for offscreen diagrams.
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+  await expect
+    .poll(async () => diagrams.count(), { timeout: 15000 })
+    .toBeGreaterThanOrEqual(2);
+});

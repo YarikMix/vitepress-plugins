@@ -5,3 +5,5 @@ dist/
 *.tgz
 playwright-report/
 test-results/
+*.tsbuildinfo
+**/.vitepress/cache/

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "release-type": "node",
+  "include-component-in-tag": true,
+  "plugins": [
+    {
+      "type": "node-workspace",
+      "updatePeerDependencies": true
+    }
+  ],
+  "packages": {
+    "packages/vitepress-module-graph": {
+      "component": "vitepress-module-graph",
+      "initial-version": "0.1.0"
+    },
+    "packages/vitepress-mermaid-renderer": {
+      "component": "vitepress-mermaid-renderer",
+      "initial-version": "0.1.0"
+    },
+    "packages/vitepress-diagram-viewer": {
+      "component": "vitepress-diagram-viewer",
+      "initial-version": "0.1.0"
+    }
+  }
+}

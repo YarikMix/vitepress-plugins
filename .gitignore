@@ -1,0 +1,7 @@
+.claude/worktrees/
+.superpowers/
+node_modules/
+dist/
+*.tgz
+playwright-report/
+test-results/

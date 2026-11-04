@@ -1,3 +1,5 @@
 {
-  "packages/vitepress-module-graph": "0.0.0"
+  "packages/vitepress-module-graph": "0.0.0",
+  "packages/vitepress-mermaid-renderer": "0.0.0",
+  "packages/vitepress-diagram-viewer": "0.0.0"
 }

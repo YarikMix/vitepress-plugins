@@ -19,7 +19,10 @@ Configure Markdown fences separately:
 
 ```ts
 import { mermaidFence } from '@wely6743/vitepress-diagram-viewer/node';
-export default { markdown: { config: mermaidFence } };
+export default {
+  markdown: { config: mermaidFence },
+  vite: { ssr: { noExternal: ['@wely6743/vitepress-diagram-viewer'] } },
+};
 ```
 
 The consumer installs/configures its Mermaid renderer in static mode. `MermaidFrame` listens for the bubbling `vitepress-mermaid:render-complete` event with `{ id: string, success: boolean }` and reads the rendered SVG's natural geometry. The viewer does not install or initialize Mermaid.

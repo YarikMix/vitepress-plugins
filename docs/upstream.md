@@ -27,7 +27,7 @@ To compare a later upstream version:
    SSR behavior and bubbling `vitepress-mermaid:render-complete` event with
    `id: string`, `success: boolean` and optional original error.
 4. Run `bun install`, `bun run build`, `bun run typecheck`, `bun run test`,
-   `bun scripts/check-packages.ts renderer` and
+   `bun run check:packages` and
    `bun run --filter '@wely6743/vitepress-mermaid-renderer' test:e2e`.
    Use Playwright's Chromium or set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to an
    installed Chromium executable. Unit/archive checks preserve Mermaid 12;

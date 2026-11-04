@@ -48,13 +48,11 @@
     "@typescript/typescript6": "6.0.2",
     "@playwright/test": "^1.63.0",
     "@vue/compiler-sfc": "3.5.43",
-    "mermaid": "^11",
-    "@wely6743/vitepress-mermaid-renderer": "workspace:*"
+    "mermaid": "^11"
   },
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc --noEmit && node scripts/vue-tsc.cjs --noEmit",
-    "test": "bun test test",
-    "check:site": "bun scripts/check-site.ts"
+    "test": "bun test test"
   }
 }

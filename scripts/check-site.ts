@@ -1,30 +1,59 @@
 import assert from 'node:assert/strict';
 import { resolve, extname } from 'node:path';
+import { spawn } from 'node:child_process';
 import { chromium, expect, type Locator } from '@playwright/test';
 
-const root = resolve(import.meta.dir, '..');
+const consumerIndex = process.argv.indexOf('--consumer');
+const root = consumerIndex === -1 ? resolve(import.meta.dir, '..') : resolve(process.argv[consumerIndex + 1]!);
+const smoke = process.argv.includes('--smoke');
 const scale = (canvas: Locator) => canvas.evaluate(el => new DOMMatrix(getComputedStyle(el).transform).a);
 const position = (canvas: Locator) => canvas.evaluate(el => getComputedStyle(el).transform);
 const closeTo = async (canvas: Locator, expected: number) => expect.poll(() => scale(canvas)).toBeCloseTo(expected, 2);
 async function build(base: string) {
-  const process = Bun.spawn(['bun', 'x', '--no-install', 'vitepress', 'build', 'tests/site'], { cwd: root, env: { ...Bun.env, SITE_BASE: base }, stdout: 'inherit', stderr: 'inherit' });
+  const process = Bun.spawn(['node', resolve(root, 'node_modules/vitepress/bin/vitepress.js'), 'build', 'tests/site'], { cwd: root, env: { ...Bun.env, SITE_BASE: base }, stdout: 'inherit', stderr: 'inherit' });
   assert.equal(await process.exited, 0, `fixture build for ${base}`);
+}
+async function dev(base: string): Promise<{ url: URL; stop: (_close?: boolean) => Promise<void> }> {
+  const child = spawn('node', [resolve(root, 'node_modules/vitepress/bin/vitepress.js'), 'dev', 'tests/site', '--host', '127.0.0.1', '--port', '0'], { cwd: root, env: { ...process.env, SITE_BASE: base }, stdio: ['ignore', 'pipe', 'pipe'] });
+  try {
+    const url = await new Promise<URL>((accept, reject) => {
+      let output = '';
+      const timer = setTimeout(() => reject(new Error(`Fixture dev timeout: ${output}`)), 60_000);
+      const read = (chunk: Buffer) => {
+        output += chunk.toString();
+        const address = /http:\/\/127\.0\.0\.1:\d+/.exec(output);
+        if (address) { clearTimeout(timer); accept(new URL(address[0])); }
+      };
+      child.stdout.on('data', read); child.stderr.on('data', read);
+      child.once('exit', code => { clearTimeout(timer); reject(new Error(`Fixture dev exited ${code}: ${output}`)); });
+    });
+    return { url, stop: (_close?: boolean) => new Promise<void>(done => {
+      const force = setTimeout(() => child.kill('SIGKILL'), 5000);
+      child.once('exit', () => { clearTimeout(force); done(); });
+      child.kill();
+    }) };
+  } catch (error) { child.kill(); throw error; }
 }
 const browser = await chromium.launch({ executablePath: Bun.env.CHROMIUM_PATH, headless: true });
 try {
-  for (const base of ['/', '/branches/plugins-check/']) {
-    await build(base);
+  for (const mode of smoke ? ['dev', 'production'] : ['production']) for (const base of ['/', '/branches/plugins-check/']) {
+    if (mode === 'production') {
+      await build(base);
+      const check = Bun.spawn(['bun', 'tests/site/graph-check.ts'], { cwd: root, env: { ...process.env, SITE_BASE: base }, stdout: 'inherit', stderr: 'inherit' });
+      assert.equal(await check.exited, 0, 'graph SSR output');
+    }
     const dist = resolve(root, 'tests/site/.vitepress/dist');
-    const server = Bun.serve({ hostname: '127.0.0.1', port: 0, async fetch(request) {
+    const server = mode === 'dev' ? await dev(base) : Bun.serve({ hostname: '127.0.0.1', port: 0, async fetch(request) {
       const url = new URL(request.url);
       if (!url.pathname.startsWith(base)) return new Response('Outside fixture base', { status: 404 });
-      const path = url.pathname.slice(base.length) || 'index.html';
+      const relative = url.pathname.slice(base.length);
+      const path = !relative || relative.endsWith('/') ? `${relative}index.html` : relative;
       let file = Bun.file(resolve(dist, path));
       if (!(await file.exists()) && !extname(path)) file = Bun.file(resolve(dist, `${path}.html`));
       return await file.exists() ? new Response(file) : new Response('Missing fixture', { status: 404 });
     } });
     try {
-      for (const width of [390, 2560]) for (const dark of [false, true]) {
+      for (const width of smoke ? [1280] : [390, 2560]) for (const dark of smoke ? [false] : [false, true]) {
         const context = await browser.newContext({ viewport: { width, height: 1000 }, colorScheme: dark ? 'dark' : 'light' });
         const page = await context.newPage();
         const errors: string[] = [];
@@ -39,6 +68,10 @@ try {
           await page.locator('.VPSwitchAppearance:visible').click();
           if (width === 390) await page.getByRole('button', { name: 'Menu', exact: true }).click();
         };
+        await page.goto(`${home}modules/2/`);
+        await expect(page.getByRole('heading', { name: 'Модуль №2', exact: true })).toHaveCount(1);
+        await expect(page.locator('.graph-canvas canvas')).toHaveCount(1);
+        await expect(page.locator('.graph-canvas canvas')).toBeVisible();
         await page.goto(home);
         const mermaid = page.locator('[data-diagram-kind="mermaid"]');
         const canvas = mermaid.locator('.diagram__canvas');
@@ -50,6 +83,16 @@ try {
         await expect(mermaid.locator('.diagram__canvas button')).toHaveCount(0);
         await expect(mermaid.locator('.diagram__canvas--pending')).toHaveCount(0);
         await expect(page.locator('html')).toHaveClass(dark ? /dark/ : /^(?!.*dark)/);
+        if (smoke) {
+          const eraser = page.locator('[data-diagram-kind="eraser"]').first();
+          await eraser.scrollIntoViewIfNeeded();
+          await expect(eraser.frameLocator('iframe').locator('svg')).toHaveAttribute('viewBox', '0 0 1200 1800');
+          await expect(eraser.locator('iframe')).toHaveAttribute('src', `${base}eraser.html`);
+          assert.deepEqual(errors, []);
+          console.log(`archive browser OK: mode=${mode} base=${base} graph/Mermaid/Eraser`);
+          await context.close();
+          continue;
+        }
         const frame = mermaid.locator('.diagram__frame');
         const dimensions = await mermaid.evaluate(el => {
           const frame = el.querySelector('.diagram__frame') as HTMLElement;
@@ -171,6 +214,6 @@ try {
         console.log(`viewer browser OK: base=${base} width=${width} theme=${dark ? 'dark' : 'light'}`);
         await context.close();
       }
-    } finally { server.stop(true); }
+    } finally { await server.stop(true); }
   }
 } finally { await browser.close(); }

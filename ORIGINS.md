@@ -10,9 +10,18 @@ The packages retain their source licenses and authorship. Their Git histories an
 - License: MIT, copyright (c) 2026 TP-Prepare; preserved in `packages/vitepress-module-graph/LICENSE`.
 - Local changes: npm scope `@wely6743`, repository metadata for `YarikMix/vitepress-plugins`, version `0.0.0`, and self-references in source, tests and documentation.
 
+## Mermaid renderer
+
+- Source: [YarikMix/vitepress-mermaid-renderer](https://github.com/YarikMix/vitepress-mermaid-renderer/tree/a9e25dca6d94710074b20e59e432de7882059ec6), maintenance branch `feat/render-events`.
+- Imported SHA: `a9e25dca6d94710074b20e59e432de7882059ec6`, descended from upstream/main baseline `5b2556adf16dceae3918e458cc5a2e2965694f58` (1.2.3). The baseline alone predates the maintained fork fixes.
+- Preserves lifecycle/SPA fix `959ec6d`, fork metadata `9e6c070`, and bubbling render-result events `a9e25dc`, all original unit/browser tests and the VitePress smoke fixture. Source docs, generated output, Git history and upstream workflows are excluded.
+- Original project/author: [sametcn99/vitepress-mermaid-renderer](https://github.com/sametcn99/vitepress-mermaid-renderer), `sametcn99`; package license remains MIT. No standalone LICENSE file exists in the imported source; no copyright or license text has been invented.
+- Local changes: npm scope `@wely6743`, repository metadata for `YarikMix/vitepress-plugins`, version `0.0.0`, import references, monorepo typecheck configuration/type-only lifecycle test corrections, and fixture-only static/theme/error browser coverage. Runtime source retains the maintained fork behavior.
+- Future source changes are made here; comparison instructions are in [docs/upstream.md](docs/upstream.md). The source clone was read only.
+
 ## Other source checks before implementation
 
 Checked 2026-11-04; these source trees were clean and were not modified.
 
-- Mermaid renderer: [YarikMix/vitepress-mermaid-renderer](https://github.com/YarikMix/vitepress-mermaid-renderer/tree/5b2556adf16dceae3918e458cc5a2e2965694f58), local and remote `main` SHA `5b2556adf16dceae3918e458cc5a2e2965694f58`.
+- Mermaid renderer initial `main` check: `5b2556adf16dceae3918e458cc5a2e2965694f58`. The later maintenance commits above were imported after verifying their ancestry.
 - Diagram viewer baseline: [Cringe-Driven-Development-Team/docs](https://github.com/Cringe-Driven-Development-Team/docs/tree/4b74e9d7871f2a24ef27f50bfe7d2f617cc76ded), clean local `heading-links` SHA `4b74e9d7871f2a24ef27f50bfe7d2f617cc76ded`. Current remote `main` was `34ea7a9c042a3e2bcd2677be71fe380bc674fbfb`, 24 commits ahead. The comparison changed no viewer, scale, SVG-size or fence source; the shared CSS change only adds a navigation-bar background.

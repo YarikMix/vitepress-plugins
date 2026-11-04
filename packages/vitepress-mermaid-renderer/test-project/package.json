@@ -1,0 +1,39 @@
+{
+  "name": "vitepress-mermaid-renderer-test",
+  "version": "1.0.0",
+  "author": "sametcn99",
+  "main": "index.js",
+  "type": "module",
+  "description": "Test project for vitepress-mermaid-renderer",
+  "keywords": [
+    "vitepress",
+    "mermaid",
+    "diagrams",
+    "documentation",
+    "markdown",
+    "plugin",
+    "vitepress-mermaid",
+    "vitepress-plugin",
+    "vitepress-plugin-mermaid",
+    "vitepress-plugin-mermaid-renderer",
+    "vitepress-plugin-mermaid"
+  ],
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview",
+    "docs:serve": "vitepress serve",
+    "lint": "eslint . --ext .js,.ts,.vue",
+    "format": "prettier --write \"**/*.{js,ts,vue,md}\""
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  },
+  "dependencies": {
+    "mermaid": "^11.16.1"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "private": true
+}

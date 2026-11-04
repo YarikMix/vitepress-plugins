@@ -200,7 +200,7 @@ try {
         await expect.poll(() => page.evaluate(() => (window as any).results.length)).toBe(2);
         await closeTo(canvas, beforeTheme);
         await expect(mermaid.locator('svg')).toHaveCount(1);
-        // Unmount during another renderer update: no stale viewer callbacks on the ordinary route.
+        // Navigate after a theme update: verify viewer removal, overflow cleanup and a fresh canvas on return.
         await toggleTheme();
         await page.getByRole('link', { name: 'Ordinary page', exact: true }).click();
         await expect(page.locator('h1')).toHaveText('Ordinary page');

@@ -113,5 +113,6 @@ This project follows specific coding standards to ensure consistency.
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the
-[MIT License](LICENSE).
+The source package declares MIT license metadata but contains no standalone
+license file. See [ORIGINS.md](../../ORIGINS.md#mermaid-renderer) for the recorded
+source metadata and authorship.

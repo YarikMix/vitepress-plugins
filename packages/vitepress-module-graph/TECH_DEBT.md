@@ -1,7 +1,7 @@
 # Техдолг: переиспользование пакета
 
 Пакет написан под сайт одной команды, и другому проекту взять его трудно. Ссылки на код ниже даны по `main`
-на [`1cc3890`](https://github.com/YarikMix/vitepress-plugins/tree/1cc3890/packages/vitepress-module-graph).
+на [`1cc3890`](https://github.com/TP-Prepare/frontend-packages/tree/1cc3890/packages/vitepress-module-graph).
 
 ## Что не мешает
 
@@ -16,7 +16,7 @@
 
 ### 1. Страница модуля — один компонент
 
-`<ModuleGraph />` ([`ModuleGraph.vue#L97-L143`](https://github.com/YarikMix/vitepress-plugins/blob/1cc3890/packages/vitepress-module-graph/src/theme/components/ModuleGraph.vue#L97-L143))
+`<ModuleGraph />` ([`ModuleGraph.vue#L97-L143`](https://github.com/TP-Prepare/frontend-packages/blob/1cc3890/packages/vitepress-module-graph/src/theme/components/ModuleGraph.vue#L97-L143))
 отдаёт одним куском панель «Люди и нагрузка» с фильтрами и поиском, граф, карточку узла, задачи доски без трека
 и список треков. Взять только граф или только список нельзя.
 
@@ -27,13 +27,13 @@
 ### 2. Интерфейс только по-русски
 
 Строки лежат прямо в компонентах:
-[`GraphFilters.vue#L12`](https://github.com/YarikMix/vitepress-plugins/blob/1cc3890/packages/vitepress-module-graph/src/theme/components/GraphFilters.vue#L12)
+[`GraphFilters.vue#L12`](https://github.com/TP-Prepare/frontend-packages/blob/1cc3890/packages/vitepress-module-graph/src/theme/components/GraphFilters.vue#L12)
 («Подзадачи», «Менторы», «Связи между треками»), склонения «трек/трека/треков»
-([`#L22`](https://github.com/YarikMix/vitepress-plugins/blob/1cc3890/packages/vitepress-module-graph/src/theme/components/GraphFilters.vue#L22)),
+([`#L22`](https://github.com/TP-Prepare/frontend-packages/blob/1cc3890/packages/vitepress-module-graph/src/theme/components/GraphFilters.vue#L22)),
 «Люди и нагрузка», «Делает», «Менторы», «Треки», «На графе модуля», заголовки таблицы архива
-([`ModuleList.vue#L24`](https://github.com/YarikMix/vitepress-plugins/blob/1cc3890/packages/vitepress-module-graph/src/theme/components/ModuleList.vue#L24)),
+([`ModuleList.vue#L24`](https://github.com/TP-Prepare/frontend-packages/blob/1cc3890/packages/vitepress-module-graph/src/theme/components/ModuleList.vue#L24)),
 `id="треки"` у заголовка списка
-([`TrackList.vue#L20`](https://github.com/YarikMix/vitepress-plugins/blob/1cc3890/packages/vitepress-module-graph/src/theme/components/TrackList.vue#L20)).
+([`TrackList.vue#L20`](https://github.com/TP-Prepare/frontend-packages/blob/1cc3890/packages/vitepress-module-graph/src/theme/components/TrackList.vue#L20)).
 По-русски и ошибки данных, и вывод CLI `module-graph`.
 
 **Сделать:** словарь строк с `locale: en | ru` в `module-graph.yaml` и переопределением отдельных подписей;
@@ -43,7 +43,7 @@
 
 Модель — учебный курс: модуль, трек, подтрек, исполнитель, ментор, спринт. Направления (`areas`), стороны
 (`sides`) и шаблон спринта уже настраиваются
-([`config.ts#L14`](https://github.com/YarikMix/vitepress-plugins/blob/1cc3890/packages/vitepress-module-graph/src/model/config.ts#L14)),
+([`config.ts#L14`](https://github.com/TP-Prepare/frontend-packages/blob/1cc3890/packages/vitepress-module-graph/src/model/config.ts#L14)),
 а слова «модуль», «трек», «ментор» — нет.
 
 **Сделать:** подписи понятий — частью словаря из п. 2 (например, «модуль» → «квартал», «трек» → «инициатива»).

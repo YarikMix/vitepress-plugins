@@ -300,8 +300,8 @@ test.describe('toolbar interactions', () => {
     page,
   }) => {
     const diagram = page.locator('.mermaid-container').first();
-    const inner = diagram.locator('.mermaid').first();
-    const initialTransform = await inner.evaluate(
+    const viewport = diagram.locator('.mermaid-viewport').first();
+    const initialTransform = await viewport.evaluate(
       (el) => (el as HTMLElement).style.transform,
     );
     const zoomIn = diagram.locator(
@@ -313,6 +313,10 @@ test.describe('toolbar interactions', () => {
 
     await zoomIn.click();
     await zoomIn.click();
+    const zoomedTransform = await viewport.evaluate(
+      (el) => (el as HTMLElement).style.transform,
+    );
+    expect(zoomedTransform).not.toEqual(initialTransform);
 
     const box = await diagram.boundingBox();
     if (!box) throw new Error('diagram bounding box unavailable');
@@ -323,12 +327,15 @@ test.describe('toolbar interactions', () => {
     await page.mouse.down();
     await page.mouse.move(startX + 80, startY + 60, { steps: 10 });
     await page.mouse.up();
+    await expect
+      .poll(() => viewport.evaluate((el) => (el as HTMLElement).style.transform))
+      .not.toEqual(zoomedTransform);
 
     await reset.click();
 
     await expect
       .poll(async () =>
-        inner.evaluate((el) => (el as HTMLElement).style.transform),
+        viewport.evaluate((el) => (el as HTMLElement).style.transform),
       )
       .toEqual(initialTransform);
   });

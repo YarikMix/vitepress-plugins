@@ -79,17 +79,17 @@ describe('MermaidRenderer', () => {
         downloadFormat: 'png',
         desktop: { download: 'enabled' },
       });
+      const spy = vi.fn();
+      document.addEventListener('vitepress-mermaid:toolbar-updated', spy, {
+        once: true,
+      });
       renderer.setToolbar({
         downloadFormat: 'png',
         desktop: { download: 'enabled' },
       });
-      // The toolbarConfig is private; verify by ensuring a follow-up call
-      // with the same options resolves to a deeply equal object.
-      const sameAgain = resolveToolbarConfig({
-        downloadFormat: 'png',
-        desktop: { download: 'enabled' },
-      });
-      expect(expected).toEqual(sameAgain);
+      expect(spy).toHaveBeenCalledTimes(1);
+      const detail = (spy.mock.calls[0]![0] as CustomEvent).detail;
+      expect(detail).toEqual(expected);
     });
 
     it('dispatches vitepress-mermaid:toolbar-updated with resolved tooltip text', async () => {
